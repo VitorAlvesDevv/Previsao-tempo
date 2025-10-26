@@ -1,5 +1,6 @@
 package com.example.previsaodotempo.fragments.home
 
+import com.example.previsaodotempo.R
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -22,6 +23,8 @@ import java.util.Locale;
 import java.util.Date;
 import android.location.Geocoder
 import android.Manifest
+
+import androidx.navigation.fragment.findNavController
 import com.example.previsaodotempo.armazenar.PreferenciasCompartilhadas
 import com.google.android.gms.location.LocationServices
 import org.koin.android.ext.android.inject
@@ -126,6 +129,7 @@ class HomeFragment : Fragment() {
             setItems(options) { _, which ->
                 when (which) {
                     0 -> proceedWithCurrentLocation()
+                    1 -> startManualLocationSearch()
                 }
             }
             show()
@@ -149,5 +153,8 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun startManualLocationSearch() {
+        findNavController().navigate(R.id.action_home_fragment_to_location_fragment )
+    }
 
 }
