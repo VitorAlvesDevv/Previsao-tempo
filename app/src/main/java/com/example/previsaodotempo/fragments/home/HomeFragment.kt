@@ -12,20 +12,28 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.previsaodotempo.data.CurrentLocation
 import com.example.previsaodotempo.databinding.FragmentHomeBinding
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.Priority
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.text.SimpleDateFormat
 import java.util.Locale;
 import java.util.Date;
+import android.location.Geocoder
 import android.Manifest
-
-
+import com.google.android.gms.location.LocationServices
 
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = requireNotNull(_binding)
-
+    private val modeloVisualizacao: ModeloVisualizacao by viewModel()
+    private val fusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
+    private val geocoder by lazy { Geocoder(requireContext()) }
     private val PrevisaoMeteorologica = PrevisaoMeteorologica(
         onLocationClicked = {showLocationOptions() }
     )
@@ -53,23 +61,39 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setPrevisaoMeteorologica()
         setPrevisaoData()
+        setObservers()
+    }
+
+    private fun setObservers() {
+        with(modeloVisualizacao) {
+            currentLocation.observe(viewLifecycleOwner) {
+            val currentLocationDataState = it ?: return@observe
+                if (currentLocationDataState.isLoading) {
+                    showLoading()
+                }
+                currentLocationDataState.currentLocation?.let { currentLocation ->
+                    hideLoading()
+                    setPrevisaoData(currentLocation)
+                }
+                currentLocationDataState.error?.let { error ->
+                    hideLoading()
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun setPrevisaoMeteorologica() {
         binding.previsaoDataRecyclerView.adapter = PrevisaoMeteorologica
     }
 
-    private fun setPrevisaoData() {
-        PrevisaoMeteorologica.setData(data = listOf(CurrentLocation(date = getCurrentDate())))
-    }
-    private fun getCurrentDate(): String {
-        val currentDate = Date()
-        val formatter = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
-        return "Hoje, ${formatter.format(currentDate)}"
+    private fun setPrevisaoData( currentLocation: CurrentLocation? = null) {
+        PrevisaoMeteorologica.setData(data = listOf( currentLocation ?: CurrentLocation()))
     }
 
+
     private fun getCurrentLocation() {
-        Toast.makeText(requireContext(), "getCurrentLocation()", Toast.LENGTH_SHORT).show()
+       modeloVisualizacao.getCurrentLocation(fusedLocationProviderClient, geocoder)
     }
 
     private fun isLocationPermissionGranted(): Boolean {
@@ -93,7 +117,7 @@ class HomeFragment : Fragment() {
     private fun showLocationOptions() {
         val options = arrayOf("Localização atual", "Pesquisa Manual")
         AlertDialog.Builder(requireContext()).apply {
-            setTittle("Selecione seu metodo de Localização")
+            setTitle("Selecione seu metodo de Localização")
             setItems(options) { _, which ->
                 when (which) {
                     0 -> proceedWithCurrentLocation()
@@ -103,7 +127,22 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setTittle(string: String) {}
+
+
+
+    private fun showLoading() {
+        with(binding) {
+            previsaoDataRecyclerView.visibility = View.GONE
+            swipeRefreshLayout.isRefreshing = true
+        }
+    }
+
+    private fun hideLoading() {
+        with(binding) {
+            previsaoDataRecyclerView.visibility = View.VISIBLE
+            swipeRefreshLayout.isRefreshing = false
+        }
+    }
 
 
 }

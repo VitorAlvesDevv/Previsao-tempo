@@ -9,7 +9,7 @@
        android:id="@+id/textCurrentDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
         android:textColor="@color/silver"
         android:textSize="@dimen/_10ssp"
         app:layout_constraintEnd_toStartOf="@+id/imageCurrentLocation"
@@ -33,6 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_4sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/raisin_black"
         android:textSize="@dimen/_12ssp"
         app:layout_constraintBottom_toBottomOf="@+id/imageLocation"
@@ -51,5 +53,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/textCurrentDate"/>
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageMoreOptions"
+        android:layout_width="@dimen/_23sdp"
+        android:layout_height="@dimen/_23sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/menu_24px"
+        android:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageCurrentLocation"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

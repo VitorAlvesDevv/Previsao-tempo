@@ -1,8 +1,21 @@
 package com.example.previsaodotempo.data
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 sealed class PrevisaoData
 
 data class CurrentLocation(
-    val date: String,
-    val location: String = "Escolha sua Localização"
+    val date: String = getCurrentDate(),
+    val location: String = "Escolha sua Localização",
+    val latitude: Double? = null,
+    val longitude: Double? = null
+
 ) : PrevisaoData()
+
+private fun getCurrentDate(): String {
+    val currentDate = Date()
+    val formatter = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
+    return "Hoje, ${formatter.format(currentDate)}"
+}
