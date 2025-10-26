@@ -22,7 +22,9 @@ import java.util.Locale;
 import java.util.Date;
 import android.location.Geocoder
 import android.Manifest
+import com.example.previsaodotempo.armazenar.PreferenciasCompartilhadas
 import com.google.android.gms.location.LocationServices
+import org.koin.android.ext.android.inject
 
 
 class HomeFragment : Fragment() {
@@ -37,6 +39,8 @@ class HomeFragment : Fragment() {
     private val PrevisaoMeteorologica = PrevisaoMeteorologica(
         onLocationClicked = {showLocationOptions() }
     )
+
+    private val PreferenciasCompartilhadas: PreferenciasCompartilhadas by inject()
 
     private val locationPermissionLaucher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -60,7 +64,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setPrevisaoMeteorologica()
-        setPrevisaoData()
+        setPrevisaoData(currentLocation = PreferenciasCompartilhadas.getCurrentLocation())
         setObservers()
     }
 
@@ -73,6 +77,7 @@ class HomeFragment : Fragment() {
                 }
                 currentLocationDataState.currentLocation?.let { currentLocation ->
                     hideLoading()
+                    PreferenciasCompartilhadas.saveCurrentLocation(currentLocation)
                     setPrevisaoData(currentLocation)
                 }
                 currentLocationDataState.error?.let { error ->

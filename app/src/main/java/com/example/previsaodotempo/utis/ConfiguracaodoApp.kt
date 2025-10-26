@@ -1,7 +1,10 @@
 package com.example.previsaodotempo.utis
 import android.app.Application
 import com.example.previsaodotempo.injecaodependencias.modeloVisualizacao
+import com.example.previsaodotempo.injecaodependencias.moduleArmazem
 import com.example.previsaodotempo.injecaodependencias.moduloRepositorio
+import com.example.previsaodotempo.injecaodependencias.moduloSerilizacao
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class ConfiguracaodoApp : Application() {
@@ -9,7 +12,14 @@ class ConfiguracaodoApp : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            modules(listOf(moduloRepositorio, modeloVisualizacao))
+            androidContext(this@ConfiguracaodoApp)
+            modules(
+                listOf(
+                    moduloRepositorio,
+                    modeloVisualizacao,
+                    moduloSerilizacao,
+                    moduleArmazem
+                    ))
         }
     }
 }
