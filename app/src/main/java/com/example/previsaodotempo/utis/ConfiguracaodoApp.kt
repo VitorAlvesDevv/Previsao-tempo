@@ -2,6 +2,7 @@ package com.example.previsaodotempo.utis
 import android.app.Application
 import com.example.previsaodotempo.injecaodependencias.modeloVisualizacao
 import com.example.previsaodotempo.injecaodependencias.moduleArmazem
+import com.example.previsaodotempo.injecaodependencias.moduloRede
 import com.example.previsaodotempo.injecaodependencias.moduloRepositorio
 import com.example.previsaodotempo.injecaodependencias.moduloSerilizacao
 import org.koin.android.ext.koin.androidContext
@@ -18,7 +19,8 @@ class ConfiguracaodoApp : Application() {
                     moduloRepositorio,
                     modeloVisualizacao,
                     moduloSerilizacao,
-                    moduleArmazem
+                    moduleArmazem,
+                    moduloRede
                     ))
         }
     }

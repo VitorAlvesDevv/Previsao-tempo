@@ -3,6 +3,8 @@ package com.example.previsaodotempo.rede.repositorio
 import android.annotation.SuppressLint
 import android.location.Geocoder
 import com.example.previsaodotempo.data.CurrentLocation
+import com.example.previsaodotempo.data.LocalizacaoRemota
+import com.example.previsaodotempo.rede.api.PrevisaoAPI
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -11,7 +13,7 @@ import com.google.android.gms.tasks.CancellationTokenSource
 
 
 
-class RepositorioPrevisaoTempo {
+class RepositorioPrevisaoTempo(private val previsaoAPI: PrevisaoAPI) {
     @SuppressLint("MissingPermission")
     fun getCurrentLocation(
         fusedLocationProviderClient: FusedLocationProviderClient,
@@ -49,5 +51,10 @@ class RepositorioPrevisaoTempo {
                 location = addressText.toString()
             )
         } ?: currentLocation
+    }
+    
+    suspend fun  searchLocation(query: String): List<LocalizacaoRemota>? {
+        val response = previsaoAPI.searchLocation(query = query)
+        return if (response.isSuccessful) response.body() else null
     }
 }
