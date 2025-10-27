@@ -38,13 +38,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:startIconDrawable="@drawable/search_24px"
-        app:startIconTint="@color/black"/>
+        app:startIconTint="@color/black">
 
 
 
-
-
-        <com.google.android.material.textfield.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/pesquise_localizacao"
@@ -53,6 +51,8 @@
             android:textColor="@color/raisin_black"
             android:textColorHint="@color/silver"
             android:textSize="@dimen/_12ssp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/locationsRecyclerview"
@@ -70,5 +70,15 @@
                 app:layout_constraintTop_toBottomOf="@id/inputSearch"
                 tools:listitem="@layout/item_container_location"
                 />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:layout_marginTop="@dimen/_24sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputSearch"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
