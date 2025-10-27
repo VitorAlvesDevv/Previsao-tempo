@@ -23,7 +23,9 @@ import java.util.Locale;
 import java.util.Date;
 import android.location.Geocoder
 import android.Manifest
-
+import androidx.fragment.app.clearFragmentResultListener
+import androidx.fragment.app.setFragmentResultListener
+import android.content.SharedPreferences
 import androidx.navigation.fragment.findNavController
 import com.example.previsaodotempo.armazenar.PreferenciasCompartilhadas
 import com.google.android.gms.location.LocationServices
@@ -31,6 +33,14 @@ import org.koin.android.ext.android.inject
 
 
 class HomeFragment : Fragment() {
+
+    companion object {
+        const val REQUEST_KEY_MANUAL_LOCATION_SEARCH = "manualLocationSearch"
+        const val KEY_LOCATION_TEXT = "locationText"
+        const val KEY_LATITUDE = "latitude"
+        const val KEY_LONGITUDE = "longitude"
+    }
+
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = requireNotNull(_binding)
@@ -154,7 +164,25 @@ class HomeFragment : Fragment() {
     }
 
     private fun startManualLocationSearch() {
+        startListeningManualLocationSelection()
         findNavController().navigate(R.id.action_home_fragment_to_location_fragment )
     }
 
+    private fun startListeningManualLocationSelection() {
+        setFragmentResultListener(REQUEST_KEY_MANUAL_LOCATION_SEARCH) { _, bundle ->
+            stopListeningManualLocationSelection()
+            val currentLocation = CurrentLocation(
+                location = bundle.getString(KEY_LOCATION_TEXT) ?: "N/A",
+                latitude = bundle.getDouble(KEY_LATITUDE),
+                longitude = bundle.getDouble(KEY_LONGITUDE)
+            )
+            PreferenciasCompartilhadas.saveCurrentLocation(currentLocation)
+            setPrevisaoData(currentLocation)
+        }
+    }
+
+
+    private fun stopListeningManualLocationSelection() {
+        clearFragmentResultListener(REQUEST_KEY_MANUAL_LOCATION_SEARCH)
+    }
 }

@@ -10,6 +10,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import com.example.previsaodotempo.data.LocalizacaoRemota
 import com.example.previsaodotempo.databinding.FragmentLocationBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.zip.Inflater
@@ -20,6 +23,12 @@ class LocationFragment : Fragment() {
     private val binding get() = requireNotNull(_binding)
 
     private val localizacaoVisual: LocalizacaoVisual by viewModel()
+
+    private val localizacaoAdaptada = LocalizacaoAdaptada (
+        onLocationClicked = {localizacaoRemota ->
+            setLocation(localizacaoRemota)
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +42,16 @@ class LocationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
+        setupLocationsRecyclerView()
         setObservers()
-
     }
 
+    private fun setupLocationsRecyclerView() {
+        with(binding.locationsRecyclerview) {
+            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+            adapter = localizacaoAdaptada
+        }
+    }
 
 
 
@@ -53,6 +68,10 @@ class LocationFragment : Fragment() {
         }
     }
 
+    private fun setLocation(localizacaoRemota: LocalizacaoRemota) {
+
+    }
+
     private fun setObservers() {
         localizacaoVisual.searchResult.observe(viewLifecycleOwner) {
             val searchResultDataState = it ?: return@observe
@@ -63,11 +82,8 @@ class LocationFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
             }
             searchResultDataState.locations?.let { remoteLocations ->
-                Toast.makeText (
-                    requireContext(),
-                    "${remoteLocations.size} localizacao encontrada",
-                    Toast.LENGTH_SHORT
-                ).show()
+                binding.locationsRecyclerview.visibility = View.VISIBLE
+                localizacaoAdaptada.setData(remoteLocations)
             }
             searchResultDataState.error?.let { error ->
                 Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
