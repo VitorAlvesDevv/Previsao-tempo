@@ -1,6 +1,7 @@
 package com.example.previsaodotempo.rede.api
 
 import com.example.previsaodotempo.data.LocalizacaoRemota
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

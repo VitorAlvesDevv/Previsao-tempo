@@ -1,5 +1,6 @@
 package com.example.previsaodotempo.fragments.location
-
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,12 +13,14 @@ class LocalizacaoVisual (private val  repositorioPrevisaoTempo: RepositorioPrevi
     val searchResult: LiveData<SearchResultDataState> get() = _searchResult
 
     fun searchLocation(query: String) {
-        emitSearchResultUiState(isLoading = true)
-        val searchResult = repositorioPrevisaoTempo.searchLocation(query)
-        if (searchResult.isNullOrEmpty()) {
-            emitSearchResultUiState(error = "Localização nao encontrada")
-        } else {
-            emitSearchResultUiState(locations = searchResult)
+        viewModelScope.launch {
+            emitSearchResultUiState(isLoading = true)
+            val searchResult = repositorioPrevisaoTempo.searchLocation(query)
+            if (searchResult.isNullOrEmpty()) {
+                emitSearchResultUiState(error = "Localização nao encontrada")
+            } else {
+                emitSearchResultUiState(locations = searchResult)
+            }
         }
     }
 
