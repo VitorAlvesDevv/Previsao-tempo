@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.previsaodotempo.data.LocalizacaoRemota
 import com.example.previsaodotempo.databinding.FragmentLocationBinding
+import com.example.previsaodotempo.fragments.home.HomeFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.zip.Inflater
 
@@ -69,7 +73,19 @@ class LocationFragment : Fragment() {
     }
 
     private fun setLocation(localizacaoRemota: LocalizacaoRemota) {
+            with(localizacaoRemota) {
+                val locationText = "$name, $region, $country"
+                setFragmentResult(
+                    requestKey = HomeFragment.REQUEST_KEY_MANUAL_LOCATION_SEARCH,
+                    result = bundleOf(
+                        HomeFragment.KEY_LOCATION_TEXT to locationText,
+                        HomeFragment.KEY_LATITUDE to lat,
+                        HomeFragment.KEY_LONGITUDE to lon
 
+                    )
+                )
+                findNavController().popBackStack()
+            }
     }
 
     private fun setObservers() {
