@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Previsaodotempo</string>
     <string name="pesquise_localizacao">Pesquise Localizacao</string>
+    <string name="wind">Wind</string>
+    <string name="humidade">Humidade</string>
+    <string name="vento">vento</string>
+    <string name="chuva">chuva</string>
 </resources>

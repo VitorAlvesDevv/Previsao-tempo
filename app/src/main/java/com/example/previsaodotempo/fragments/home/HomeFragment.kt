@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
     private fun setObservers() {
         with(modeloVisualizacao) {
             currentLocation.observe(viewLifecycleOwner) {
-            val currentLocationDataState = it ?: return@observe
+            val currentLocationDataState = it.getContentIfNotHandled() ?: return@observe
                 if (currentLocationDataState.isLoading) {
                     showLoading()
                 }
