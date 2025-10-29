@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.location.Geocoder
 import com.example.previsaodotempo.data.CurrentLocation
 import com.example.previsaodotempo.data.LocalizacaoRemota
+import com.example.previsaodotempo.data.RemotePrevisaoData
 import com.example.previsaodotempo.rede.api.PrevisaoAPI
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -57,4 +58,10 @@ class RepositorioPrevisaoTempo(private val previsaoAPI: PrevisaoAPI) {
         val response = previsaoAPI.searchLocation(query = query)
         return if (response.isSuccessful) response.body() else null
     }
+
+    suspend fun  getPrevisaoData(latitude: Double, longitude: Double): RemotePrevisaoData? {
+        val response = previsaoAPI.getPrevisaoData(query = "$latitude,$longitude")
+        return if (response.isSuccessful) response.body() else null
+    }
+
 }

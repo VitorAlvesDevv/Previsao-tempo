@@ -12,13 +12,30 @@ class PrevisaoMeteorologica(
     private val onLocationClicked: () -> Unit
 ) : RecyclerView.Adapter<PrevisaoMeteorologica.CurrentLocationViewHolder>(){
 
-    private val PrevisaoData = mutableListOf<PrevisaoData>()
+    private companion object {
+        const val INDEX_CURRENT_LOCATION = 0
+        const val INDEX_CURRENT_PREVISAO = 1
+        const val INDEX_FORECAST = 2
+
+    }
+
+    private val previsaoData = mutableListOf<PrevisaoData>()
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(data: List<PrevisaoData>) {
-        PrevisaoData.clear()
-        PrevisaoData.addAll(data)
+        previsaoData.clear()
+        previsaoData.addAll(data)
         notifyDataSetChanged()
+    }
+
+    fun setCurrentLocation(currentLocation: CurrentLocation) {
+        if (previsaoData.isEmpty()) {
+            previsaoData.add(INDEX_CURRENT_LOCATION, currentLocation)
+            notifyItemInserted(INDEX_CURRENT_LOCATION)
+        } else {
+            previsaoData[INDEX_CURRENT_PREVISAO] = currentLocation
+            notifyItemChanged(INDEX_CURRENT_PREVISAO)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentLocationViewHolder {

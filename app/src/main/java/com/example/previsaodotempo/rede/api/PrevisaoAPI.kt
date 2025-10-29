@@ -1,6 +1,7 @@
 package com.example.previsaodotempo.rede.api
 
 import com.example.previsaodotempo.data.LocalizacaoRemota
+import com.example.previsaodotempo.data.RemotePrevisaoData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,4 +17,10 @@ interface PrevisaoAPI {
         @Query("key") key: String = API_KEY,
         @Query("q") query: String
     ): Response<List<LocalizacaoRemota>>
+
+    @GET("forecast.json")
+    suspend fun getPrevisaoData(
+        @Query("key") key: String = API_KEY,
+        @Query("q") query: String
+    ): Response<RemotePrevisaoData>
 }

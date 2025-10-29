@@ -14,6 +14,14 @@ data class CurrentLocation(
 
 ) : PrevisaoData()
 
+data class CurrentPrevisao(
+    val icon: String,
+    val temperature: Float,
+    val wind: Float,
+    val humidity: Int,
+    val chanceOfRain: Int
+) : PrevisaoData
+
 private fun getCurrentDate(): String {
     val currentDate = Date()
     val formatter = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
