@@ -76,14 +76,14 @@ class ModeloVisualizacao(private val repositorioPrevisaoTempo: RepositorioPrevis
     fun getPrevisaoData(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             emitPrevisaoDataUiState(isLoading = true)
-            repositorioPrevisaoTempo.getPrevisaoData(latitude, longitude)?.let {previsaoData ->
+            repositorioPrevisaoTempo.getPrevisaoData(latitude, longitude)?.let { previsaoData ->
                 emitPrevisaoDataUiState(
                     currentPrevisao = CurrentPrevisao(
                         icon = previsaoData.current.condition.icon,
                         temperature = previsaoData.current.temperature,
                         wind = previsaoData.current.wind,
                         humidity = previsaoData.current.humidity,
-                        chanceOfRain = previsaoData.forecast.forecastDia.first().day.chanceOfRain,
+                        chanceOfRain = previsaoData.forecast.forecastDia.first().day.chanceOfRain
 
 
                     )
@@ -96,7 +96,8 @@ class ModeloVisualizacao(private val repositorioPrevisaoTempo: RepositorioPrevis
         isLoading: Boolean = false,
         currentPrevisao: CurrentPrevisao? = null,
         error: String? = null
-    ) {
+    )
+    {
         val previsaoDataState = PrevisaoDataState(isLoading, currentPrevisao, error)
         _previsaoData.value = EventDataLive(previsaoDataState)
     }
@@ -104,6 +105,7 @@ class ModeloVisualizacao(private val repositorioPrevisaoTempo: RepositorioPrevis
 
 
     data class PrevisaoDataState(
+        val isLoading: Boolean,
         val currentPrevisao: CurrentPrevisao?,
         val error: String?
     )

@@ -1,6 +1,6 @@
 package com.example.previsaodotempo.fragments.home
 
-import android.annotation.SuppressLint
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,19 +14,14 @@ class PrevisaoMeteorologica(
 
     private companion object {
         const val INDEX_CURRENT_LOCATION = 0
-        const val INDEX_CURRENT_PREVISAO = 1
+        const val INDEX_CURRENT_PREVISAO = 0
         const val INDEX_FORECAST = 2
 
     }
 
     private val previsaoData = mutableListOf<PrevisaoData>()
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(data: List<PrevisaoData>) {
-        previsaoData.clear()
-        previsaoData.addAll(data)
-        notifyDataSetChanged()
-    }
+
 
     fun setCurrentLocation(currentLocation: CurrentLocation) {
         if (previsaoData.isEmpty()) {
@@ -49,11 +44,11 @@ class PrevisaoMeteorologica(
     }
 
     override fun  onBindViewHolder(holder: CurrentLocationViewHolder, position: Int) {
-        holder.bind(PrevisaoData[position] as CurrentLocation)
+        holder.bind(previsaoData[position] as CurrentLocation)
     }
 
     override fun getItemCount(): Int {
-        return PrevisaoData.size
+        return previsaoData.size
     }
 
 

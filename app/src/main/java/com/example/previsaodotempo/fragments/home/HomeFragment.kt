@@ -25,7 +25,7 @@ import android.location.Geocoder
 import android.Manifest
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
-import android.content.SharedPreferences
+
 import androidx.navigation.fragment.findNavController
 import com.example.previsaodotempo.armazenar.PreferenciasCompartilhadas
 import com.google.android.gms.location.LocationServices
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
     }
     private val geocoder by lazy { Geocoder(requireContext()) }
     private val PrevisaoMeteorologica = PrevisaoMeteorologica(
-        onLocationClicked = {showLocationOptions() }
+        onLocationClicked = { showLocationOptions() }
     )
 
     private val PreferenciasCompartilhadas: PreferenciasCompartilhadas by inject()
@@ -65,6 +65,8 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private var isInitialLocationSet: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,25 +79,46 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setPrevisaoMeteorologica()
-        setPrevisaoData(currentLocation = PreferenciasCompartilhadas.getCurrentLocation())
+        setCurrentLocation(currentLocation = PreferenciasCompartilhadas.getCurrentLocation())
         setObservers()
+        if (!isInitialLocationSet) {
+            setCurrentLocation(currentLocation = PreferenciasCompartilhadas.getCurrentLocation())
+            isInitialLocationSet = true
+        }
     }
 
     private fun setObservers() {
         with(modeloVisualizacao) {
             currentLocation.observe(viewLifecycleOwner) {
-            val currentLocationDataState = it.getContentIfNotHandled() ?: return@observe
+                val currentLocationDataState = it.getContentIfNotHandled() ?: return@observe
+
+
                 if (currentLocationDataState.isLoading) {
                     showLoading()
                 }
                 currentLocationDataState.currentLocation?.let { currentLocation ->
                     hideLoading()
                     PreferenciasCompartilhadas.saveCurrentLocation(currentLocation)
-                    setPrevisaoData(currentLocation)
+                    setCurrentLocation(currentLocation)
                 }
                 currentLocationDataState.error?.let { error ->
                     hideLoading()
                     Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+                }
+            }
+            previsaoData.observe(viewLifecycleOwner) {
+                val previsaoDataState = it.getContentIfNotHandled() ?: return@observe
+                binding.swipeRefreshLayout.isRefreshing = previsaoDataState.isLoading
+                previsaoDataState.currentPrevisao?.let { currentPrevisao ->
+                    Toast.makeText(
+                        requireContext(),
+                        currentPrevisao.temperature.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                previsaoDataState.error?.let { error ->
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+
                 }
             }
         }
@@ -105,17 +128,18 @@ class HomeFragment : Fragment() {
         binding.previsaoDataRecyclerView.adapter = PrevisaoMeteorologica
     }
 
-    private fun setPrevisaoData( currentLocation: CurrentLocation? = null) {
-        PrevisaoMeteorologica.setData(data = listOf( currentLocation ?: CurrentLocation()))
+    private fun setCurrentLocation(currentLocation: CurrentLocation? = null) {
+        PrevisaoMeteorologica.setCurrentLocation(currentLocation ?: CurrentLocation())
+        currentLocation?.let { getPrevisaoData(currentLocation = it) }
     }
 
 
     private fun getCurrentLocation() {
-       modeloVisualizacao.getCurrentLocation(fusedLocationProviderClient, geocoder)
+        modeloVisualizacao.getCurrentLocation(fusedLocationProviderClient, geocoder)
     }
 
     private fun isLocationPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission (
+        return ContextCompat.checkSelfPermission(
             requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
@@ -147,8 +171,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
-
     private fun showLoading() {
         with(binding) {
             previsaoDataRecyclerView.visibility = View.GONE
@@ -165,7 +187,7 @@ class HomeFragment : Fragment() {
 
     private fun startManualLocationSearch() {
         startListeningManualLocationSelection()
-        findNavController().navigate(R.id.action_home_fragment_to_location_fragment )
+        findNavController().navigate(R.id.action_home_fragment_to_location_fragment)
     }
 
     private fun startListeningManualLocationSelection() {
@@ -177,7 +199,7 @@ class HomeFragment : Fragment() {
                 longitude = bundle.getDouble(KEY_LONGITUDE)
             )
             PreferenciasCompartilhadas.saveCurrentLocation(currentLocation)
-            setPrevisaoData(currentLocation)
+            setCurrentLocation(currentLocation)
         }
     }
 
@@ -185,4 +207,15 @@ class HomeFragment : Fragment() {
     private fun stopListeningManualLocationSelection() {
         clearFragmentResultListener(REQUEST_KEY_MANUAL_LOCATION_SEARCH)
     }
+
+    private fun getPrevisaoData(currentLocation: CurrentLocation) {
+        if (currentLocation.latitude != null && currentLocation.longitude != null) {
+            modeloVisualizacao.getPrevisaoData(
+                latitude = currentLocation.latitude,
+                longitude = currentLocation.longitude
+
+            )
+        }
+    }
+
 }

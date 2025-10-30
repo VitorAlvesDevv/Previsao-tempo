@@ -20,7 +20,7 @@ data class CurrentPrevisao(
     val wind: Float,
     val humidity: Int,
     val chanceOfRain: Int
-) : PrevisaoData
+) : PrevisaoData()
 
 private fun getCurrentDate(): String {
     val currentDate = Date()
