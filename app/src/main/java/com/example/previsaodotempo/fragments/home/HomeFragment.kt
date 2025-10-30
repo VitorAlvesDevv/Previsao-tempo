@@ -110,11 +110,7 @@ class HomeFragment : Fragment() {
                 val previsaoDataState = it.getContentIfNotHandled() ?: return@observe
                 binding.swipeRefreshLayout.isRefreshing = previsaoDataState.isLoading
                 previsaoDataState.currentPrevisao?.let { currentPrevisao ->
-                    Toast.makeText(
-                        requireContext(),
-                        currentPrevisao.temperature.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    PrevisaoMeteorologica.setCurrentPrevisao(currentPrevisao)
                 }
                 previsaoDataState.error?.let { error ->
                     Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()

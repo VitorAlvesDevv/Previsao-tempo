@@ -32,10 +32,10 @@
             android:textColor="@color/raisin_black"
             android:textSize="@dimen/_56ssp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ImageIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/imageIcon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ImageIcon"
-            app:layout_constraintTop_toTopOf="@id/ImageIcon"
+            app:layout_constraintStart_toEndOf="@+id/imageIcon"
+            app:layout_constraintTop_toTopOf="@id/imageIcon"
             tools:text="27\u2103"/>
 
         <com.google.android.material.card.MaterialCardView
@@ -49,8 +49,8 @@
             android:elevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cardHumidade"
-            app:layout_constraintStart_toStartOf="@+id/ImageIcon"
-            app:layout_constraintTop_toBottomOf="@+id/ImageIcon"
+            app:layout_constraintStart_toStartOf="@+id/imageIcon"
+            app:layout_constraintTop_toBottomOf="@+id/imageIcon"
             app:strokeColor="@color/silver"
             app:strokeWidth="1dp">
 
@@ -103,7 +103,7 @@
             app:layout_constraintEnd_toStartOf="@+id/cardChuva"
             app:layout_constraintStart_toEndOf="@+id/cardWind"
 
-            app:layout_constraintTop_toBottomOf="@+id/ImageIcon"
+            app:layout_constraintTop_toBottomOf="@+id/imageIcon"
             app:strokeColor="@color/silver"
             app:strokeWidth="1dp">
 
@@ -154,7 +154,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardHumidade"
-            app:layout_constraintTop_toBottomOf="@+id/ImageIcon"
+            app:layout_constraintTop_toBottomOf="@+id/imageIcon"
             app:strokeColor="@color/silver"
             app:strokeWidth="1dp">
 
