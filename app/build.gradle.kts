@@ -73,6 +73,8 @@ dependencies {
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
 
 
 
