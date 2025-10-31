@@ -18,7 +18,8 @@ import android.location.Geocoder
 import android.Manifest
 import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.setFragmentResultListener
-
+import com.example.previsaodotempo.SobreActivity
+import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.example.previsaodotempo.armazenar.PreferenciasCompartilhadas
 import com.google.android.gms.location.LocationServices
@@ -43,8 +44,15 @@ class HomeFragment : Fragment() {
     }
     private val geocoder by lazy { Geocoder(requireContext()) }
     private val PrevisaoMeteorologica = PrevisaoMeteorologica(
-        onLocationClicked = { showLocationOptions() }
+        onLocationClicked = { showLocationOptions() },
+        onMoreOptionsClicked = { startSobreActivity() }
     )
+
+    private fun startSobreActivity() {
+        val intent = Intent(requireContext(), SobreActivity::class.java)
+        startActivity(intent)
+    }
+
 
     private val PreferenciasCompartilhadas: PreferenciasCompartilhadas by inject()
 

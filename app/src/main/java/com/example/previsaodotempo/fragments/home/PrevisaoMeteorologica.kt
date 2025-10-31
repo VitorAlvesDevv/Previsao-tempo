@@ -11,7 +11,9 @@ import com.example.previsaodotempo.databinding.ItemContainerCurrentLocationBindi
 import com.example.previsaodotempo.databinding.ItemContainerCurrentPrevisaoBinding
 
 class PrevisaoMeteorologica(
-    private val onLocationClicked: () -> Unit
+    private val onLocationClicked: () -> Unit,
+    private val onMoreOptionsClicked: () -> Unit
+
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private companion object {
@@ -97,6 +99,7 @@ class PrevisaoMeteorologica(
                 textCurrentLocation.text = currentLocation.location
                 imageCurrentLocation.setOnClickListener {onLocationClicked() }
                 textCurrentLocation.setOnClickListener {onLocationClicked()}
+                imageMoreOptions.setOnClickListener { onMoreOptionsClicked() }
             }
         }
     }
