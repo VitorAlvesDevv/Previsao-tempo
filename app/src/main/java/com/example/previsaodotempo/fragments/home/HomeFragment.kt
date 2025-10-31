@@ -14,13 +14,6 @@ import androidx.fragment.app.Fragment
 import com.example.previsaodotempo.data.CurrentLocation
 import com.example.previsaodotempo.databinding.FragmentHomeBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.Priority
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import java.text.SimpleDateFormat
-import java.util.Locale;
-import java.util.Date;
 import android.location.Geocoder
 import android.Manifest
 import androidx.fragment.app.clearFragmentResultListener

@@ -16,8 +16,9 @@ class PrevisaoMeteorologica(
 
     private companion object {
         const val INDEX_CURRENT_LOCATION = 0
-        const val INDEX_CURRENT_PREVISAO = 0
+        const val INDEX_CURRENT_PREVISAO = 1
         const val INDEX_FORECAST = 2
+        const val POSICAO_CABECALHO = 0
 
     }
 
@@ -30,8 +31,8 @@ class PrevisaoMeteorologica(
             previsaoData.add(INDEX_CURRENT_LOCATION, currentLocation)
             notifyItemInserted(INDEX_CURRENT_LOCATION)
         } else {
-            previsaoData[INDEX_CURRENT_PREVISAO] = currentLocation
-            notifyItemChanged(INDEX_CURRENT_PREVISAO)
+            previsaoData[0] = currentLocation
+            notifyItemChanged(0)
         }
     }
 
