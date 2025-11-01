@@ -112,7 +112,8 @@ class PrevisaoMeteorologica(
                 imageIcon.load("https:${currentPrevisao.icon}"){ crossfade(true) }
                 textTemperature.text = String.format("%s\u00B0C", currentPrevisao.temperature)
                 textWind.text  = String.format("%s km/h", currentPrevisao.wind)
-                textHumidade.text = String.format("%s%%", currentPrevisao.chanceOfRain)
+                textHumidade.text = String.format("%s%%", currentPrevisao.humidity)
+                textChuva.text = String.format("%s%%", currentPrevisao.chanceOfRain)
             }
         }
     }
